@@ -1,5 +1,5 @@
 ### EX3 Implementation of GSP Algorithm In Python
-### DATE: 
+### DATE: 07/02/2026
 ### AIM: To implement GSP Algorithm In Python.
 ### Description:
 The Generalized Sequential Pattern (GSP) algorithm is a data mining technique used for discovering frequent patterns within a sequence database. It operates by identifying sequences that frequently occur together. GSP works by employing a depth-first search strategy to explore and extract frequent patterns efficiently.
@@ -41,65 +41,53 @@ for each wear category.</p>
 ```python
 from collections import defaultdict
 from itertools import combinations
+from tabulate import tabulate  # For table formatting
+
 # Function to generate candidate k-item sequences
-def generate_candidates(dataset, k):
+def generate_candidates(dataset, k, min_support):
+    candidates = defaultdict(int)
+    for seq in dataset:
+        for comb in combinations(seq, k):
+            candidates[comb] += 1
+    return {item: support for item, support in candidates.items() if support >= min_support}
 
-
-    /WRITE YOUR CODE HERE/
-
-
-#Function to perform GSP algorithm
+# Function to perform GSP algorithm
 def gsp(dataset, min_support):
+    frequent_patterns = defaultdict(int)
+    k = 1
+    sequences = dataset
+    while True:
+        candidates = generate_candidates(sequences, k, min_support)
+        if not candidates:
+            break
+        frequent_patterns.update(candidates)
+        k += 1
+    return frequent_patterns
 
-
-  /WRITE YOUR CODE HERE/
-
-
-#Example dataset for each category
+# Example dataset for each category
 top_wear_data = [
- ["blouse", "t-shirt", "tank_top"],
- ["hoodie", "sweater", "top"],["hoodie"],["hoodie","sweater"]
- #Add more sequences for top wear
+    ['a','b','c','b','e','c','f','g','a','b','c'],
+    ['a','d','b','c','c','f','g','c','h'],
+    ['b','c','a','d','e','b','f','c','d','f','g','h'],
+    ['c','e','c','e','h']
+    # Add more sequences for top wear
 ]
-bottom_wear_data = [
- ["jeans", "trousers", "shorts"],
- ["leggings", "skirt", "chinos"],
- # Add more sequences for bottom wear
-]
-party_wear_data = [
- ["cocktail_dress", "evening_gown", "blazer"],
- ["party_dress", "formal_dress", "suit"],
- ["party_dress", "formal_dress", "suit"],
- ["party_dress", "formal_dress", "suit"],
- ["party_dress", "formal_dress", "suit"],
- ["party_dress"],["party_dress"],
- # Add more sequences for party wear
-]
-#Minimum support threshold
-min_support = 2
-#Perform GSP algorithm for each category
+
+# Minimum support threshold
+min_support = 4
+
+# Perform GSP algorithm for each category
 top_wear_result = gsp(top_wear_data, min_support)
-bottom_wear_result = gsp(bottom_wear_data, min_support)
-party_wear_result = gsp(party_wear_data, min_support)
-#Output the frequent sequential patterns for each category
+
+# Output the frequent sequential patterns for each category in table format
 print("Frequent Sequential Patterns - Top Wear:")
 if top_wear_result:
- for pattern, support in top_wear_result.items():
- print(f"Pattern: {pattern}, Support: {support}")
+    table_data = []
+    for pattern, support in top_wear_result.items():
+        table_data.append([pattern, support])
+    print(tabulate(table_data, headers=["Pattern", "Support"], tablefmt="grid"))
 else:
- print("No frequent sequential patterns found in Top Wear.")
-print("\nFrequent Sequential Patterns - Bottom Wear:")
-if bottom_wear_result:
- for pattern, support in bottom_wear_result.items():
- print(f"Pattern: {pattern}, Support: {support}")
-else:
- print("No frequent sequential patterns found in Bottom Wear.")
-print("\nFrequent Sequential Patterns - Party Wear:")
-if party_wear_result:
- for pattern, support in party_wear_result.items():
- print(f"Pattern: {pattern}, Support: {support}")
-else:
- print("No frequent sequential patterns found in Party Wear.")
+    print("No frequent sequential patterns found in Top Wear.")
 ```
 ### Output:
 
@@ -130,6 +118,28 @@ visualize_patterns_line(bottom_wear_result, 'Bottom Wear')
 visualize_patterns_line(party_wear_result, 'Party Wear')
 ```
 ### Output:
+1-Line frequence
 
+<img width="595" height="261" alt="Screenshot 2026-02-06 163023" src="https://github.com/user-attachments/assets/b148fa09-3b51-41a3-9d9f-51a9553027e0" />
+
+2-Line frequence
+
+![WhatsApp Image 2026-02-07 at 13 01 45](https://github.com/user-attachments/assets/4e1996bd-f420-4ace-bbe7-9868b47f521a)
+
+
+3-Line frequence
+
+<img width="440" height="822" alt="Screenshot 2026-02-06 222000" src="https://github.com/user-attachments/assets/c00bad81-4df6-4a8b-ba0f-67e72d7c7d93" />
+
+
+4-Line frequence
+
+<img width="461" height="822" alt="Screenshot 2026-02-06 222018" src="https://github.com/user-attachments/assets/93d1abc0-903b-4ed5-a742-98b4318c9b5d" />
+
+5-Line frequence
+
+<img width="466" height="757" alt="Screenshot 2026-02-06 222034" src="https://github.com/user-attachments/assets/79bb8f84-3c8a-4e10-b8a1-6f29d6b4aa18" />
 
 ### Result:
+
+Thus, GSP Algorithm In Python is implemented successfully.
